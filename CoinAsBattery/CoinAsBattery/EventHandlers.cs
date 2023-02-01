@@ -31,7 +31,7 @@ namespace CoinAsBattery
                     if (radio.IsUsable || radio.BatteryPercent == 0)
                     {
                         radio.BatteryPercent += config.RadioBatteryCapacity;
-                        player.ReferenceHub.inventory.ServerRemoveItem(pickup.Info.Serial, pickup);
+                        pickup.DestroySelf();
                         Log.Debug($"Player {player.Nickname} recharged Radio to {radio.BatteryPercent}.", config.Debug, "CoinAsBattery");
                         return false;
                     }
@@ -43,14 +43,14 @@ namespace CoinAsBattery
                     if (micro.RemainingEnergy < 1)
                     {
                         micro.RemainingEnergy += config.MicroBatteryCapacity;
-                        player.ReferenceHub.inventory.ServerRemoveItem(pickup.Info.Serial, pickup);
+                        pickup.DestroySelf();
                         Log.Debug($"Player {player.Nickname} recharged MicroHID to {micro.RemainingEnergy}.", config.Debug, "CoinAsBattery");
                         return false;
                     }
                     if (config.ShouldExplode.ToLower() == "pick")
                     {
                         player.ReferenceHub.inventory.ServerRemoveItem(micro.ItemSerial, micro.PickupDropModel);
-                        player.ReferenceHub.inventory.ServerRemoveItem(pickup.Info.Serial, pickup);
+                        pickup.DestroySelf();
                         ExplosionGrenade.Explode(new Footprint(player.ReferenceHub), player.Position, MicroHIDGrenade());
                         Log.Debug($"MicroHID exploded, because player {player.Nickname} overcharged it.", config.Debug, "CoinAsBattery");
                         return false;
